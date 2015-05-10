@@ -9,11 +9,17 @@ from django.template.defaultfilters import slugify
 
 from bazar.forms import CrispyFormMixin
 from bazar.utils.imports import safe_import_module
-from bazar.models import Entity
+from bazar.models import Entity, Note
+
+
+class EntityModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return u"{kind} - {name}".format(name=obj.name, kind=obj.get_kind_display())
+
 
 class EntityForm(CrispyFormMixin, forms.ModelForm):
     """
-    Category form
+    Entity base form
     """
     crispy_form_helper_path = 'bazar.forms.crispies.entity_helper'
     
@@ -24,9 +30,10 @@ class EntityForm(CrispyFormMixin, forms.ModelForm):
     class Meta:
         model = Entity
 
+
 class EntityForKindForm(EntityForm):
     """
-    Category form
+    Entity form for a specific kind (the kind is allready setted)
     """
     crispy_form_helper_path = 'bazar.forms.crispies.entity_helper'
     
@@ -48,4 +55,44 @@ class EntityForKindForm(EntityForm):
     
     class Meta:
         model = Entity
-        fields = ('name', 'adress', 'town', 'zipcode', 'phone')
+        fields = ('name', 'adress', 'town', 'zipcode', 'phone', 'fax')
+
+
+class EntityDeleteForm(CrispyFormMixin, forms.ModelForm):
+    """
+    Entity delete form
+    """
+    crispy_form_helper_path = 'bazar.forms.crispies.entity_delete_helper'
+    
+    confirm = forms.BooleanField(label=_("Confirm"), initial=False, required=True)
+    
+    def __init__(self, *args, **kwargs):
+        self.has_notes = kwargs.get('instance').note_set.count()>0
+        self.crispy_form_helper_kwargs = {
+            'has_notes': self.has_notes,
+        }
+        
+        super(EntityDeleteForm, self).__init__(*args, **kwargs)
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        
+        # Only add 'move_to' field if there are at least one note
+        if self.has_notes:
+            self.fields['move_notecards_to'] = EntityModelChoiceField(
+                label=_("Move notecards to"),
+                queryset=Entity.objects.all().exclude(pk=self.instance.id).order_by('kind', 'name'),
+                empty_label=_("[No selection, notes will be deleted]"),
+                required=False
+            )
+        
+    def save(self):
+        if self.cleaned_data.get('move_notecards_to', False):
+            for note in self.instance.note_set.all():
+                note.entity = self.cleaned_data['move_notecards_to']
+                note.save()
+        self.instance.delete()
+        
+        return
+    
+    class Meta:
+        model = Entity
+        fields = ('confirm',)# 'move_notecards_to',)

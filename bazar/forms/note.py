@@ -24,21 +24,34 @@ class NoteForm(CrispyFormMixin, forms.ModelForm):
         super(NoteForm, self).__init__(*args, **kwargs)
         super(forms.ModelForm, self).__init__(*args, **kwargs)
         
-        # Set the form field for content field
+        # Set the form field editor for content field
         field_helper = safe_import_module(settings.BAZAR_MARKUP_FIELD_HELPER_PATH)
         if field_helper is not None:
-            self.fields['content'] = field_helper(self, **{'label':_('Content'), 'required':True})
+            self.fields['content'] = field_helper(self, **{'label':_('Content'), 'required': False})
+        
+        self.fields['tags'].help_text = _("A comma-separated list of tags")
 
     def clean_content(self):
         """
         content content validation
         """
         content = self.cleaned_data.get("content")
-        validation_helper = safe_import_module(settings.BAZAR_MARKUP_VALIDATOR_HELPER_PATH)
-        if validation_helper is not None:
-            return validation_helper(self, content)
-        else:
-            return content
+        if content:
+            validation_helper = safe_import_module(settings.BAZAR_MARKUP_VALIDATOR_HELPER_PATH)
+            if validation_helper is not None:
+                return validation_helper(self, content)
+            
+        return content
+
+    def clean(self):
+        cleaned_data = super(NoteForm, self).clean()
+        content = self.cleaned_data.get("content", None)
+        uploaded_file = self.cleaned_data.get("file", None)
+        
+        if not content and not uploaded_file:
+            raise forms.ValidationError(_("You must fill at least a content or a file"))
+        
+        return cleaned_data
     
     def save(self, *args, **kwargs):
         instance = super(NoteForm, self).save(commit=False, *args, **kwargs)
@@ -54,7 +67,7 @@ class NoteForm(CrispyFormMixin, forms.ModelForm):
     
     class Meta:
         model = Note
-        fields = ('title', 'content', 'tags')
+        fields = ('title', 'content', 'file', 'tags')
 
 class NoteDeleteForm(CrispyFormMixin, forms.ModelForm):
     """

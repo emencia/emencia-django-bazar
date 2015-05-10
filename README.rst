@@ -16,28 +16,16 @@ A Django app to store basic informations about related entities (like customers,
 Features
 ********
 
-* Note cards for entities;
+* Note cards for entities: can contains content text or/and a file attachment;
 * Optional markup into note cards content (default is no markup, `RestructuredText`_ is easily available);
 * `Django-CodeMirror`_ usage if markup is used with RestructuredText;
 * Assets management with django-assets;
+* **i18n** usage for the interface;
 * Templates prototyped with Foundation5;
-* Tags for note cards;
-
-Planned for beta stage
-**********************
-
-* ☑ Finish full prototyping (index views, detail views, create forms, edit forms, etc..);
-* ☑ Cloud tags for notes;
-* ☑ Use optional markup for note content and implement RestructuredText+Django-CodeMirror as default shipped;
-* ☑ Implement jquery plugin `jQuery-Tags-Input`_ for tag input into note forms;
-* ☑ Better asset management with optional django-assets usage;
-* ☑ Use Compass+SCSS for CSS stuff;
-* ☐ File(s?) attachment(s?) into note (making content not required nor the attachment but need a validation of at least one is filled). Probably with its own model (not filebrowser) because this should be protected documents, not shareable;
-* ☐ Add permissions usage, not every one should be able to see notes, but just for entities adresses&phone why not;
-* ☐ Documentation;
+* Tags for note cards using `jQuery-Tags-Input`_ into form;
 
 Links
 *****
 
-* Download his `PyPi package <http://pypi.python.org/pypi/emencia-django-bazar>`_;
+* Download his `PyPi package <https://pypi.python.org/pypi/emencia-django-bazar>`_;
 * Clone it on his `Github repository <https://github.com/sveetch/emencia-django-bazar>`_;

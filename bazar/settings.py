@@ -1,13 +1,13 @@
 """
 Default Bazar settings to import/define in your project settings
 """
-gettext = lambda s: s
+_ = lambda s: s
 
 ENTITY_KINDS = (
-    ('customer', gettext('Customer')),
-    ('supplier', gettext('Supplier')),
-    ('internal', gettext('Internal')),
-    ('administration', gettext('Administration')),
+    ('customer', _('Customer')),
+    ('supplier', _('Supplier')),
+    ('internal', _('Internal')),
+    ('administration', _('Administration')),
 )
 DEFAULT_ENTITY_KIND = 'customer'
 

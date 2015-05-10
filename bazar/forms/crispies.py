@@ -54,7 +54,11 @@ def entity_helper(form_tag=True, kind=None):
         Row(
             Column(
                 'phone',
-                css_class='small-12'
+                css_class='small-12 medium-6'
+            ),
+            Column(
+                'fax',
+                css_class='small-12 medium-6'
             ),
         ),
         ButtonHolderPanel(
@@ -63,6 +67,49 @@ def entity_helper(form_tag=True, kind=None):
         ),
     ]
     helper.layout = Layout(*fieldset)
+    
+    return helper
+
+
+def entity_delete_helper(form_tag=True, has_notes=False):
+    """
+    Entity delete form layout helper
+    """
+    helper = FormHelper()
+    helper.form_action = '.'
+    helper.attrs = {'data_abide': ''}
+    helper.form_tag = form_tag
+    
+    columns = []
+    
+    # Show 'move to' field if there are some notes
+    if has_notes:
+        columns.append(
+            Column(
+                'move_notecards_to',
+                css_class='small-12 medium-8'
+            ),
+        )
+    
+    columns.append(
+        Column(
+            'confirm',
+            css_class='small-12 medium-8'
+        ),
+    )
+    
+    columns.append(
+        Column(
+            Submit('submit', _('Submit')),
+            css_class='small-12 medium-4 text-right'
+        ),
+    )
+    
+    helper.layout = Layout(
+        ButtonHolderPanel(
+            Row(*columns),
+        ),
+    )
     
     return helper
 
@@ -86,6 +133,12 @@ def note_helper(form_tag=True):
         Row(
             Column(
                 'content',
+                css_class='small-12'
+            ),
+        ),
+        Row(
+            Column(
+                'file',
                 css_class='small-12'
             ),
         ),

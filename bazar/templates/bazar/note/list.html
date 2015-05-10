@@ -11,7 +11,11 @@
                 </small>
             </p>
             <h4>
-                <a href="{% url "bazar:entity-note-detail" kind=item.entity.kind entity_id=item.entity.id note_id=item.id %}">{{ item.title }}</a>
+                {% if item.file and not item.content %}
+                    <i class="icon-download"></i>{% include 'bazar/note/_attachment_download.html' with sendfile_enabled=ATTACHMENTS_WITH_SENDFILE entity_instance=item.entity note_instance=item title=item.title only %}
+                {% else %}
+                    <a href="{% url "bazar:entity-note-detail" kind=item.entity.kind entity_id=item.entity.id note_id=item.id %}">{{ item.title }}</a>
+                {% endif %}
             </h4>
         </li>
     {% endfor %}

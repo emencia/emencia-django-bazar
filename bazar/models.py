@@ -1,13 +1,30 @@
 # -*- coding: utf-8 -*-
+import warnings
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now as tz_now
-
-from localflavor.fr.forms import FRZipCodeField, FRPhoneNumberField
+from django.core.files.storage import FileSystemStorage
 
 from taggit.managers import TaggableManager
+
+from bazar.utils.filefield import content_file_name
+
+ATTACHMENT_FILE_UPLOADTO = lambda x,y: content_file_name('bazar/attachments/%Y/%m/%d', x, y)
+
+
+# Check for django-sendfile availibility
+try:
+    from sendfile import sendfile
+except ImportError:
+    warnings.warn("Bazar note attachment should be private but you don't have installed 'django-sendfile' so for now your attachment will be public for everyone. Install it to avoid this warning.", UserWarning)
+    ATTACHMENTS_WITH_SENDFILE = False
+    ATTACHMENT_FS_STORAGE = FileSystemStorage(location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL)
+else:
+    ATTACHMENTS_WITH_SENDFILE = True
+    ATTACHMENT_FS_STORAGE = FileSystemStorage(location=settings.SENDFILE_ROOT, base_url=settings.SENDFILE_URL)
+
 
 class Entity(models.Model):
     """
@@ -22,9 +39,10 @@ class Entity(models.Model):
     kind = models.CharField(_('kind'), choices=settings.ENTITY_KINDS, default=settings.DEFAULT_ENTITY_KIND, max_length=40, blank=False)
     
     name = models.CharField(_("name"), blank=False, max_length=255, unique=True)
+    
     adress = models.TextField(_('full adress'), blank=True)
     phone = models.CharField(_('phone'), max_length=15, blank=True)
-    # TODO: to remove
+    fax = models.CharField(_('fax'), max_length=15, blank=True)
     town = models.CharField(_('town'), max_length=75, blank=True)
     zipcode = models.CharField(_('zipcode'), max_length=6, blank=True)
 
@@ -63,7 +81,8 @@ class Note(models.Model):
     entity = models.ForeignKey(Entity, verbose_name=_("entity"), null=True, blank=True)
     
     title = models.CharField(_("title"), max_length=150)
-    content = models.TextField(_('content'))
+    content = models.TextField(_('content'), blank=True)
+    file = models.FileField(_('file'), upload_to=ATTACHMENT_FILE_UPLOADTO, storage=ATTACHMENT_FS_STORAGE, max_length=255, null=True, blank=True)
     
     tags = TaggableManager()
 

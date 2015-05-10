@@ -17,6 +17,16 @@
     <div class="small-12 columns">
         {% block breadcrumbs_block %}{% autobreadcrumbs_tag %}{% endblock %}
         {% block bazar_maintitle %}<h2>{% current_title_from_breadcrumbs %}</h2>{% endblock %}
+        {% block bazar_messages %}
+            {% if messages %}
+                {% for message in messages %}
+                <div data-alert class="alert-box {% if message.tags %}{{ message.tags }}{% endif %} radius">
+                {{ message }}
+                <a href="#" class="close">&times;</a>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endblock %}
         {% block bazar_content %}{% endblock %}
     </div>
 </div>{% endblock %}

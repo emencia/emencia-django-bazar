@@ -4,8 +4,9 @@ Bazar URLs
 """
 from django.conf.urls import *
 
+from bazar.models import ATTACHMENTS_WITH_SENDFILE
 from bazar.views import IndexView
-from bazar.views.entity import EntityIndexView, KindEntityIndexView, EntityDetailView, EntityEditView
+from bazar.views.entity import EntityIndexView, KindEntityIndexView, EntityDetailView, EntityEditView, EntityDeleteView
 from bazar.views.note import NoteCreateView, NoteDetailView, NoteEditView, TagNoteListView, NoteDeleteView
 
 urlpatterns = patterns('',
@@ -17,6 +18,7 @@ urlpatterns = patterns('',
     
     url(r'^entity/(?P<kind>[-\w]+)/(?P<entity_id>\d+)/$', EntityDetailView.as_view(), name="entity-detail"),
     url(r'^entity/(?P<kind>[-\w]+)/(?P<entity_id>\d+)/edit/$', EntityEditView.as_view(), name="entity-edit"),
+    url(r'^entity/(?P<kind>[-\w]+)/(?P<entity_id>\d+)/delete/$', EntityDeleteView.as_view(), name="entity-delete"),
     
     url(r'^entity/(?P<kind>[-\w]+)/(?P<entity_id>\d+)/note/create/$', NoteCreateView.as_view(), name="entity-note-create"),
     url(r'^entity/(?P<kind>[-\w]+)/(?P<entity_id>\d+)/(?P<note_id>\d+)/$', NoteDetailView.as_view(), name="entity-note-detail"),
@@ -25,3 +27,9 @@ urlpatterns = patterns('',
     
     url(r'^tag/(?P<tag>[-\w]+)/$', TagNoteListView.as_view(), name="tag-note-list"),
 )
+
+if ATTACHMENTS_WITH_SENDFILE:
+    from bazar.views.note import AttachmentProtectedDownloadView
+    urlpatterns += patterns('',
+        url(r'^entity/(?P<kind>[-\w]+)/(?P<entity_id>\d+)/(?P<note_id>\d+)/attachment/$', AttachmentProtectedDownloadView.as_view(), name='entity-note-attachment-download'),
+    )

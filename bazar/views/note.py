@@ -2,16 +2,23 @@
 """
 Common views
 """
+import os
+
 from django.conf import settings
 from django.views import generic
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
 
 from braces.views import LoginRequiredMixin
 
 from taggit.models import Tag
 
-from bazar.models import Entity, Note
+from sendfile import sendfile
+
+from bazar.models import ATTACHMENTS_WITH_SENDFILE, Entity, Note
 from bazar.forms.note import NoteForm, NoteDeleteForm
 from bazar.utils.mixins import MarkupMixin, EntityMixin
 
@@ -23,6 +30,7 @@ class NoteEntityBaseView(EntityMixin):
     def get_context_data(self, **kwargs):
         context = super(NoteEntityBaseView, self).get_context_data(**kwargs)
         context.update({
+            'ATTACHMENTS_WITH_SENDFILE': ATTACHMENTS_WITH_SENDFILE,
             'entity_instance': self.entity,
         })
         return context
@@ -54,6 +62,10 @@ class NoteCreateView(LoginRequiredMixin, MarkupMixin, NoteEntityBaseView, generi
             'entity': self.entity,
         })
         return kwargs
+    
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, _('Note has been created'), fail_silently=True)
+        return super(NoteCreateView, self).form_valid(form)
 
 
 class NoteEditView(LoginRequiredMixin, MarkupMixin, NoteEntityBaseView, generic.UpdateView):
@@ -84,6 +96,10 @@ class NoteEditView(LoginRequiredMixin, MarkupMixin, NoteEntityBaseView, generic.
             'entity': self.entity,
         })
         return kwargs
+    
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, _('Note has been edited successfully'), fail_silently=True)
+        return super(NoteEditView, self).form_valid(form)
 
 
 class TagNoteListView(LoginRequiredMixin, generic.ListView):
@@ -93,6 +109,13 @@ class TagNoteListView(LoginRequiredMixin, generic.ListView):
     model = Note
     template_name = "bazar/note/list.html"
     paginate_by = settings.BAZAR_NOTE_INDEX_PAGINATE
+    
+    def get_context_data(self, **kwargs):
+        context = super(TagNoteListView, self).get_context_data(**kwargs)
+        context.update({
+            'ATTACHMENTS_WITH_SENDFILE': ATTACHMENTS_WITH_SENDFILE,
+        })
+        return context
     
     def get_tags_slug(self):
         """
@@ -154,3 +177,20 @@ class NoteDeleteView(LoginRequiredMixin, NoteEntityBaseView, generic.UpdateView)
     def post(self, request, *args, **kwargs):
         self.entity = self.get_entity()
         return super(NoteDeleteView, self).post(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, _('Note has been deleted'), fail_silently=True)
+        return super(NoteDeleteView, self).form_valid(form)
+
+
+class AttachmentProtectedDownloadView(NoteDetailView):
+    """
+    View to download protected note attachment
+    
+    TODO: Unbind POST method for sanity
+    """
+    def get(self, request, **kwargs):
+        self.object = self.get_object()
+        
+        file_path = os.path.join(settings.PROJECT_PATH, self.object.file.path)
+        return sendfile(request, file_path, attachment=True, attachment_filename=os.path.basename(file_path))
