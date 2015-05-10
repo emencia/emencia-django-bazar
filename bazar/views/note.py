@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Common views
+Note views
 """
 import os
 

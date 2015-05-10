@@ -1,13 +1,13 @@
 """
 Default Bazar settings to import/define in your project settings
 """
-_ = lambda s: s
+ugettext_lazy = lambda s: s
 
 ENTITY_KINDS = (
-    ('customer', _('Customer')),
-    ('supplier', _('Supplier')),
-    ('internal', _('Internal')),
-    ('administration', _('Administration')),
+    ('customer', ugettext_lazy('Customer')),
+    ('supplier', ugettext_lazy('Supplier')),
+    ('internal', ugettext_lazy('Internal')),
+    ('administration', ugettext_lazy('Administration')),
 )
 DEFAULT_ENTITY_KIND = 'customer'
 

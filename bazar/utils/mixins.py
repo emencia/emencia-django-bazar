@@ -4,6 +4,7 @@ Common mixins
 """
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 
 from bazar.models import Entity
 
@@ -34,7 +35,7 @@ class KindMixin(object):
         return self.kwargs['kind']
     
     def get_kind_display(self):
-        return dict(settings.ENTITY_KINDS).get(self.get_kind())
+        return _(dict(settings.ENTITY_KINDS).get(self.get_kind()))
 
 
 class EntityMixin(KindMixin):

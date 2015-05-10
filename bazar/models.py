@@ -13,6 +13,14 @@ from bazar.utils.filefield import content_file_name
 
 ATTACHMENT_FILE_UPLOADTO = lambda x,y: content_file_name('bazar/attachments/%Y/%m/%d', x, y)
 
+def enforce_choices_translation(choices):
+    """
+    For unknown reasons, Django does not apply i18n machinery on choices labels coming 
+    from settings, so enforce them there (and also in some other methods, see 
+    templatetags)
+    """
+    choices = list(choices)
+    return tuple( [(k, _(v)) for k,v in choices] )
 
 # Check for django-sendfile availibility
 try:
@@ -36,7 +44,7 @@ class Entity(models.Model):
     created = models.DateTimeField(_("created"), editable=False, null=True, blank=True)
     modified = models.DateTimeField(_("modified"), editable=False, null=True, blank=True)
     
-    kind = models.CharField(_('kind'), choices=settings.ENTITY_KINDS, default=settings.DEFAULT_ENTITY_KIND, max_length=40, blank=False)
+    kind = models.CharField(_('kind'), choices=enforce_choices_translation(settings.ENTITY_KINDS), default=settings.DEFAULT_ENTITY_KIND, max_length=40, blank=False)
     
     name = models.CharField(_("name"), blank=False, max_length=255, unique=True)
     

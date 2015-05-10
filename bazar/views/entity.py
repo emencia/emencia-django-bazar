@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Common views
+Entity views
 """
 from django.conf import settings
 from django.views import generic

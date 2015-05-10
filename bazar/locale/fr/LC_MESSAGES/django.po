@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-10 04:08+0200\n"
+"POT-Creation-Date: 2015-05-10 16:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Bazar"
 msgstr ""
 
-#: crumbs.py:6 models.py:70
+#: crumbs.py:6 models.py:76
 msgid "Entities"
 msgstr "Entités"
 
@@ -44,71 +44,71 @@ msgstr "Ajouter une note"
 msgid "Tag: {{ view.tag.name }}"
 msgstr "Étiquette: {{ view.tag.name }}"
 
-#: models.py:36 models.py:77
+#: models.py:42 models.py:83
 msgid "created"
 msgstr ""
 
-#: models.py:37 models.py:78
+#: models.py:43 models.py:84
 msgid "modified"
 msgstr ""
 
-#: models.py:39
+#: models.py:45
 msgid "kind"
 msgstr "type"
 
-#: models.py:41
+#: models.py:47
 msgid "name"
 msgstr "nom"
 
-#: models.py:43
+#: models.py:49
 msgid "full adress"
 msgstr "adresse complète"
 
-#: models.py:44
+#: models.py:50
 msgid "phone"
 msgstr "téléphone"
 
-#: models.py:45
+#: models.py:51
 msgid "fax"
 msgstr "fax"
 
-#: models.py:46
+#: models.py:52
 msgid "town"
 msgstr "ville"
 
-#: models.py:47
+#: models.py:53
 msgid "zipcode"
 msgstr "code postal"
 
-#: models.py:69
+#: models.py:75
 msgid "Entity"
 msgstr "Entité"
 
-#: models.py:80
+#: models.py:86
 msgid "author"
 msgstr "auteur"
 
-#: models.py:81
+#: models.py:87
 msgid "entity"
 msgstr "entité"
 
-#: models.py:83
+#: models.py:89
 msgid "title"
 msgstr "titre"
 
-#: models.py:84
+#: models.py:90
 msgid "content"
 msgstr "contenu"
 
-#: models.py:85
+#: models.py:91
 msgid "file"
 msgstr "fichier"
 
-#: models.py:109
+#: models.py:115
 msgid "Note"
 msgstr ""
 
-#: models.py:110
+#: models.py:116
 msgid "Notes"
 msgstr ""
 

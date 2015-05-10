@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Category forms
+Entity forms
 """
 from django.conf import settings
 from django import forms
