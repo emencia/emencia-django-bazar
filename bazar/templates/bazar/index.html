@@ -16,6 +16,6 @@
 <hr/>
 {% get_tagcloud as tags for 'bazar.note' %}
 <p class="text-center">{% for tag in tags %}
-    <span class="label secondary radius" style="font-size:{{ tag.num_times }}em;"><a href="{% url "bazar:tag-note-list" tag=tag.slug %}">{{ tag.name }}</a></span>
+    <span class="label secondary radius" style="font-size:{{ tag.weight|floatformat }}em;"><a href="{% url "bazar:tag-note-list" tag=tag.slug %}">{{ tag.name }}</a></span>
 {% endfor %}</p>
 {% endblock %}
