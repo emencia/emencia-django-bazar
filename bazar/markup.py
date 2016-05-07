@@ -1,5 +1,8 @@
 """
 Some markup utilities for RST and DjangoCodeMirror usage
+
+TODO: rst/djangocodemirror formatting should not be the default formatting,
+      because they are not package requirements.
 """
 from django.forms import ValidationError
 
