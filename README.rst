@@ -13,6 +13,9 @@ Emencia Django Bazar
 
 A Django app to store basic informations about related entities (like customers, suppliers, ourselves, etc..).
 
+.. Warning::
+    Since XX version, Django <= 1.8 support has been dropped, South migrations have moved to ``south_migration``, initial Django migration start from last south migration and so if you want to upgrade you will need to fake the initial migration.
+
 Features
 ********
 
