@@ -1,0 +1,5 @@
+django>=1.8,<1.9
+pytest
+pytest-django
+factory-boy
+pytest-factoryboy

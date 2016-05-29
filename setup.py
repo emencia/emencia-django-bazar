@@ -17,11 +17,13 @@ setup(
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Framework :: Django',
+        "Framework :: Django :: 1.8",
         'Intended Audience :: Developers',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     install_requires=[
+        'Django>=1.8',
         'autobreadcrumbs>=1.0',
         'django-braces>=1.2.0,<1.4',
         'crispy-forms-foundation>=0.5.0',

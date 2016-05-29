@@ -43,7 +43,7 @@ Features
 * Optional markup into note cards content (default is no markup, `RestructuredText`_ is easily available);
 * `Django-CodeMirror`_ usage if markup is used with RestructuredText;
 * Assets management with django-assets;
-* **i18n** usage for the interface;
+* **i18n** usage for front interface;
 * Templates prototyped with Foundation5;
 * Tags for note cards using `jQuery-Tags-Input`_ into form;
 
@@ -64,7 +64,7 @@ Add bazar app and its requirements to your installed apps in settings : ::
         'localflavor',
         'taggit',
         'taggit_templatetags2',
-        'djangocodemirror'
+        'djangocodemirror',
         'sendfile',
         'bazar',
         ...
@@ -76,7 +76,7 @@ Then add its settings : ::
 
 See the app ``settings.py`` file to see what settings you can override.
 
-Also there is some settings requirements taggit, djangocodemirror and sendfile. See their documentation for more details how to configure them properly.
+Also there is some settings for requirements: taggit, djangocodemirror and sendfile. See their documentation for more details how to configure them properly.
 
 And add its views to your main ``urls.py`` : ::
 
