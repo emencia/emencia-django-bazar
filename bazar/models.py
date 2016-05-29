@@ -53,8 +53,8 @@ class Entity(models.Model):
     name = models.CharField(_("name"), blank=False, max_length=255, unique=True)
 
     adress = models.TextField(_('full adress'), blank=True)
-    phone = models.CharField(_('phone'), max_length=15, blank=True)
-    fax = models.CharField(_('fax'), max_length=15, blank=True)
+    phone = models.CharField(_('phone'), max_length=20, blank=True)
+    fax = models.CharField(_('fax'), max_length=20, blank=True)
     town = models.CharField(_('town'), max_length=75, blank=True)
     zipcode = models.CharField(_('zipcode'), max_length=6, blank=True)
 

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from bazar.models import Entity, Note
 
-from factories import UserFactory, EntityFactory, NoteFactory
+from factories import UserFactory, EntityModelFactory, NoteModelFactory
 
 
 def test_ping_index(admin_client):
@@ -17,7 +17,7 @@ def test_ping_index(admin_client):
 @pytest.mark.django_db
 def test_factory_entity(admin_client):
     """Create an Entity object from factory"""
-    factory_entity = EntityFactory()
+    factory_entity = EntityModelFactory()
 
     assert Entity.objects.count() == 1
 
@@ -28,7 +28,7 @@ def test_factory_entity(admin_client):
 @pytest.mark.django_db
 def test_factory_note(admin_client):
     """Create Note objects from factory"""
-    note_entity = NoteFactory()
+    note_entity = NoteModelFactory()
 
     note = Note.objects.all()[0]
 

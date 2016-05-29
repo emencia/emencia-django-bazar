@@ -3,6 +3,11 @@
 Changelog
 =========
 
+Version 0.6.2 - 2016/05/29
+--------------------------
+
+* Extended 'Entity.phone' and 'Entity.fax' fields from 15 to 20 characters to accept international numbers;
+
 Version 0.6.1 - 2016/05/29
 --------------------------
 

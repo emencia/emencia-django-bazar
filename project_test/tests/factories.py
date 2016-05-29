@@ -36,9 +36,9 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
 
-class EntityFactory(factory.django.DjangoModelFactory):
+class EntityFactory(factory.Factory):
     """
-    Factory for Entity model with default kind
+    Base factory for Entity with default kind
     """
     kind = settings.DEFAULT_ENTITY_KIND
 
@@ -53,20 +53,51 @@ class EntityFactory(factory.django.DjangoModelFactory):
         model = Entity
 
 
+class EntityFormFactory(EntityFactory):
+    """
+    Factory for Entity datas to give to Entity forms
+    """
+    class Meta:
+        abstract = False
+        strategy = factory.BUILD_STRATEGY
+
+
+class EntityModelFactory(EntityFactory, factory.django.DjangoModelFactory):
+    """
+    Factory for Entity model
+    """
+    class Meta:
+        abstract = False
+
+
 class NoteFactory(factory.django.DjangoModelFactory):
     """
-    Factory for Note model
-
-    file = models.FileField(_('file'), upload_to=get_file_uploadto, storage=ATTACHMENT_FS_STORAGE, max_length=255, null=True, blank=True)
+    Base factory for Note model
     """
     author = factory.SubFactory(UserFactory)
-    entity = factory.SubFactory(EntityFactory)
+    entity = factory.SubFactory(EntityModelFactory)
 
     title = factory.Faker('sentence', locale='fr_FR', nb_words=6, variable_nb_words=True)
     content = factory.Faker('text', locale='fr_FR', max_nb_chars=500)
 
     file = factory.Faker('file_name', category=None, extension=None)
 
+    class Meta:
+        model = Note
+
+
+class NoteFormFactory(NoteFactory):
+    """
+    Factory for Note datas to give to Entity forms
+    """
+    class Meta:
+        abstract = False
+
+
+class NoteModelFactory(NoteFactory, factory.django.DjangoModelFactory):
+    """
+    Factory for Note model
+    """
     @classmethod
     def _create(cls, model_class, *args, **kwargs):
         """
@@ -83,4 +114,4 @@ class NoteFactory(factory.django.DjangoModelFactory):
         return obj
 
     class Meta:
-        model = Note
+        abstract = False

@@ -7,6 +7,15 @@ import django.core.files.storage
 from django.conf import settings
 import taggit.managers
 
+# Check for django-sendfile availibility
+try:
+    from sendfile import sendfile
+except ImportError:
+    ATTACHMENT_LOCATION = settings.MEDIA_ROOT
+    ATTACHMENT_BASEURL = settings.MEDIA_URL
+else:
+    ATTACHMENT_LOCATION = settings.SENDFILE_ROOT
+    ATTACHMENT_BASEURL = settings.SENDFILE_URL
 
 class Migration(migrations.Migration):
 
@@ -43,7 +52,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(verbose_name='modified', null=True, editable=False, blank=True)),
                 ('title', models.CharField(max_length=150, verbose_name='title')),
                 ('content', models.TextField(verbose_name='content', blank=True)),
-                ('file', models.FileField(upload_to=bazar.models.get_file_uploadto, storage=django.core.files.storage.FileSystemStorage(base_url=b'/protected_medias', location=b'/home/emencia/projects/new-extranet/project/protected_medias'), max_length=255, blank=True, null=True, verbose_name='file')),
+                ('file', models.FileField(upload_to=bazar.models.get_file_uploadto, storage=django.core.files.storage.FileSystemStorage(base_url=ATTACHMENT_BASEURL, location=ATTACHMENT_LOCATION), max_length=255, blank=True, null=True, verbose_name='file')),
                 ('author', models.ForeignKey(verbose_name='author', to=settings.AUTH_USER_MODEL)),
                 ('entity', models.ForeignKey(verbose_name='entity', blank=True, to='bazar.Entity', null=True)),
                 ('tags', taggit.managers.TaggableManager(to='taggit.Tag', through='taggit.TaggedItem', help_text='A comma-separated list of tags.', verbose_name='Tags')),

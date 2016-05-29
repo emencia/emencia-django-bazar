@@ -11,3 +11,6 @@ dist/*
 #defaults
 *.pyc
 *.pyo
+
+#tests
+project_test/.cache/
