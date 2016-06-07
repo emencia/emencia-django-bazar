@@ -36,7 +36,7 @@ def test_factory_note(admin_client):
     assert User.objects.count() == 2
     # One entity from note subfactory
     assert Entity.objects.count() == 1
-    # The create note
+    # The created note
     assert Note.objects.count() == 1
     # At least one tag from previous note
     assert (note.tags.count()>0) == True

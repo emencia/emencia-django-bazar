@@ -82,6 +82,14 @@ class NoteFactory(factory.django.DjangoModelFactory):
 
     file = factory.Faker('file_name', category=None, extension=None)
 
+    @classmethod
+    def make_some_random_tags(self):
+        """Choose a random set of random tags to add"""
+        tags_count = random.randint(1, len(NOTE_TAGS_SAMPLES))
+        tags = random.sample(NOTE_TAGS_SAMPLES, tags_count)
+
+        return tags
+
     class Meta:
         model = Note
 
@@ -90,8 +98,16 @@ class NoteFormFactory(NoteFactory):
     """
     Factory for Note datas to give to Entity forms
     """
+    @factory.lazy_attribute
+    def tags(self):
+        """
+        Return a Python list, because its the attempted type with form field
+        """
+        return NoteFormFactory.make_some_random_tags()
+
     class Meta:
         abstract = False
+        strategy = factory.BUILD_STRATEGY
 
 
 class NoteModelFactory(NoteFactory, factory.django.DjangoModelFactory):
@@ -107,9 +123,7 @@ class NoteModelFactory(NoteFactory, factory.django.DjangoModelFactory):
         obj.save()
 
         # Choose a random set of random tags to add
-        tags_count = random.randint(1, len(NOTE_TAGS_SAMPLES))
-        tags = random.sample(NOTE_TAGS_SAMPLES, tags_count)
-        obj.tags.add(*tags)
+        obj.tags.add(*cls.make_some_random_tags())
 
         return obj
 
